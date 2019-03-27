@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--密码输入过渡图标改变控件-->
+    <declare-styleable name="PasswordTranEditText">
+
+        <attr name="symbol" format="string" />
+
+    </declare-styleable>
+
+
+</resources>
