@@ -7,13 +7,9 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-
-import com.aiitec.toollibrary.ImageUtils;
-import com.aiitec.toollibrary.ThreadPoolManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +19,6 @@ import me.iwf.photopicker.entity.Photo;
 import me.iwf.photopicker.event.OnItemCheckListener;
 import me.iwf.photopicker.fragment.ImagePagerFragment;
 import me.iwf.photopicker.fragment.PhotoPickerFragment;
-import me.iwf.photopicker.utils.StatusBarUtil;
 
 import static android.widget.Toast.LENGTH_LONG;
 import static me.iwf.photopicker.PhotoPicker.ADD_STATUS_BAR;
@@ -39,7 +34,6 @@ import static me.iwf.photopicker.PhotoPicker.EXTRA_PREVIEW_ENABLED;
 import static me.iwf.photopicker.PhotoPicker.EXTRA_SHOW_CAMERA;
 import static me.iwf.photopicker.PhotoPicker.EXTRA_SHOW_GIF;
 import static me.iwf.photopicker.PhotoPicker.KEY_SELECTED_PHOTOS;
-import static me.iwf.photopicker.PhotoPicker.KEY_SELECTED_PHOTOS_OBJECT;
 
 /**
  * @author ailibin
@@ -77,7 +71,6 @@ public class PhotoPickerActivity extends AppCompatActivity {
         isCompress = getIntent().getBooleanExtra(EXTRA_IS_COMPRESS, false);
         imageSize = getIntent().getIntExtra(EXTRA_COMPRESS_SIZE, 0);
         //线程模式为缓存模式,就是上一个线程使用完之后,执行下一个任务会重用上一个线程,而不会重新创建一个线程
-        cachedThreadPool = ThreadPoolManager.newCachedThreadPool();
         boolean previewEnabled = getIntent().getBooleanExtra(EXTRA_PREVIEW_ENABLED, true);
         boolean addStatusBar = getIntent().getBooleanExtra(ADD_STATUS_BAR, true);
 
@@ -85,7 +78,7 @@ public class PhotoPickerActivity extends AppCompatActivity {
         setContentView(R.layout.__picker_activity_photo_picker);
         Toolbar mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        StatusBarUtil.setStatusBarColor(this, R.color._picker_colorPrimary);
+//        StatusBarUtil.setStatusBarColor(this, R.color._picker_colorPrimary);
         setTitle(R.string.__picker_title);
         ActionBar actionBar = getSupportActionBar();
 
@@ -106,10 +99,6 @@ public class PhotoPickerActivity extends AppCompatActivity {
             for (Photo photo : originalPhotosObject) {
                 originalPhotos.add(photo.getPath());
             }
-        }
-
-        if (originalPhotos != null) {
-            Log.e("ailibin", "originalPhotos: " + originalPhotos);
         }
 
         pickerFragment = (PhotoPickerFragment) getSupportFragmentManager().findFragmentByTag("tag");
@@ -267,42 +256,10 @@ public class PhotoPickerActivity extends AppCompatActivity {
                     tempSelectedPhotos.add(photo);
                 }
             }
-            //需要压缩
-            if (isCompress) {
-                for (final String path : selectedPhotos) {
-                    cachedThreadPool.execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (imageSize <= 0) {
-                                String filePath = ImageUtils.getCompressFile(PhotoPickerActivity.this, path);
-                                tempFilePath.add(filePath);
-                            } else {
-                                String filePath = ImageUtils.getCompressFile(PhotoPickerActivity.this, path, imageSize);
-                                tempFilePath.add(filePath);
-                            }
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (tempFilePath.size() == originSize) {
-                                        //压缩完了
-                                        if (tempFilePath != null && tempFilePath.size() > 0) {
-                                            intent.putStringArrayListExtra(KEY_SELECTED_PHOTOS, tempFilePath);
-                                            intent.putParcelableArrayListExtra(KEY_SELECTED_PHOTOS_OBJECT, tempSelectedPhotos);
-                                            setResult(RESULT_OK, intent);
-                                            finish();
-                                        }
-                                    }
-                                }
-                            });
-                        }
-                    });
-                }
-            } else {
-                if (selectedPhotos != null && selectedPhotos.size() > 0) {
-                    intent.putStringArrayListExtra(KEY_SELECTED_PHOTOS, selectedPhotos);
-                    setResult(RESULT_OK, intent);
-                    finish();
-                }
+            if (selectedPhotos != null && selectedPhotos.size() > 0) {
+                intent.putStringArrayListExtra(KEY_SELECTED_PHOTOS, selectedPhotos);
+                setResult(RESULT_OK, intent);
+                finish();
             }
             return true;
         }

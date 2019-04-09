@@ -41,4 +41,18 @@
         android:text="@string/action_sign_in"
         android:textStyle="bold" />
 
+    <Button
+        android:id="@+id/btn_photo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="跳转图库" />
+
+    <ImageView
+        android:id="@+id/iv_image"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="20dp"
+        android:scaleType="centerCrop" />
+
 </LinearLayout>
