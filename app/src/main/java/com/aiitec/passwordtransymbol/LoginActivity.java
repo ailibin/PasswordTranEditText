@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -51,6 +52,8 @@ public class LoginActivity extends AppCompatActivity {
     private Button btn_photo;
     private ImageView iv_image;
 
+    private static final String TAG = "ailibin";
+
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +89,12 @@ public class LoginActivity extends AppCompatActivity {
             if (data != null) {
                 paths = data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
             }
-            Bitmap bitmap = ImageUtils.imageDecoderFromFile(this, paths.get(0));
+            Log.e(TAG, "paths: " + paths.toString());
+
+//            Glide.with(this)
+//                    .load(paths.get(0))
+//                    .into(iv_image);
+            Bitmap bitmap = ImageUtils.compressImageFromFile(this, paths.get(0));
             iv_image.setImageBitmap(bitmap);
 
         }

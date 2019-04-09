@@ -21,7 +21,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -40,8 +39,8 @@ import me.iwf.photopicker.event.OnPhotoClickListener;
 import me.iwf.photopicker.utils.AndroidLifecycleUtils;
 import me.iwf.photopicker.utils.ImageCaptureManager;
 import me.iwf.photopicker.utils.MediaStoreHelper;
-import me.iwf.photopicker.utils.PermissionsConstant;
 import me.iwf.photopicker.utils.PermissionUtils;
+import me.iwf.photopicker.utils.PermissionsConstant;
 
 import static android.app.Activity.RESULT_OK;
 import static me.iwf.photopicker.PhotoPicker.DEFAULT_COLUMN_NUMBER;
@@ -167,7 +166,6 @@ public class PhotoPickerFragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         final Button btSwitchDirectory = rootView.findViewById(R.id.button);
-        RelativeLayout rltFolderContainer = rootView.findViewById(R.id.rltFolderContainer);
         btPreviewSelectImages = rootView.findViewById(R.id.preview);
 
         listPopupWindow = new ListPopupWindow(getActivity());
@@ -227,18 +225,6 @@ public class PhotoPickerFragment extends Fragment {
                 }
             }
         });
-
-//        rltFolderContainer.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (listPopupWindow.isShowing()) {
-//                    listPopupWindow.dismiss();
-//                } else if (!getActivity().isFinishing()) {
-//                    adjustHeight();
-//                    listPopupWindow.show();
-//                }
-//            }
-//        });
 
         btPreviewSelectImages.setOnClickListener(new OnClickListener() {
             @Override
@@ -305,7 +291,6 @@ public class PhotoPickerFragment extends Fragment {
         }
     }
 
-    //这里看产品怎么说,拍完照马上要显示出到另外一个界面
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == ImageCaptureManager.REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {

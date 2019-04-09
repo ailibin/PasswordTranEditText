@@ -460,6 +460,7 @@ public class ImageUtils {
      * @return
      */
     public static Bitmap imageDecoderFromFile(Context context, String srcPath) {
+
         File file = new File(srcPath);
         ImageDecoder.Source source = ImageDecoder.createSource(file);
 
